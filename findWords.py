@@ -1,4 +1,3 @@
-
 #Your task is to write a program which answers the following question: are the characters comprising the first string hidden inside the second string?
 
 def wordFinder(word1, string):

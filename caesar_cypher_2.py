@@ -52,5 +52,3 @@ def encrypt(text, shift):
 
     else: 
         print("Please enter a correct shift number. ")
-
-encrypt(text, shift)

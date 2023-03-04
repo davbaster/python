@@ -28,4 +28,3 @@ if __name__ == "__main__": #executed if code is called from module directly
     my_list = [i+1 for i in range(5)]
     print(suml(my_list) == 15)
     print(prodl(my_list) == 120)
-

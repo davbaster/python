@@ -9,4 +9,3 @@ x = re.search("^My.*Payne$", txt) # Searching for any text in a string that cont
 if x:
   print("Are you Max Payne!")
 else:
-  print("We did not find the person you were looking for...")

@@ -23,9 +23,3 @@ def birthDigit(num):
 date = input("Enter your birth date in format YYYYMMDD: ")
 print()
 print ("Digit of life is ", birthDigit(date))
-
-
-
-
-
-
