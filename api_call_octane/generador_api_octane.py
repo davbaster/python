@@ -1,10 +1,14 @@
-from PySide6.QtWidgets import QApplication, QLabel, QLineEdit, QMainWindow, QPushButton, QVBoxLayout, QWidget, QDialog
+from PySide6.QtWidgets import QApplication, QLabel, QLineEdit, QMainWindow, QPushButton, QVBoxLayout, QWidget, QDialog, QMessageBox
 import openpyxl
+import sys
 
 
 class Formulario(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        # Agrega los widgets de entrada de texto y las etiquetas a un layout vertical
+        layout = QVBoxLayout()
 
         # Crea los widgets de entrada de texto y las etiquetas
         self.octane_url_label = QLabel("Octane Url:")
@@ -13,20 +17,6 @@ class Formulario(QMainWindow):
         self.shared_space_text_field = QLineEdit()
         self.udf_field_label = QLabel("UDF Field:")
         self.udf_field_text_field = QLineEdit()
-        self.value_id_label_1 = QLabel("Deprecated value Id:")
-        self.value_id_text_field_1 = QLineEdit()
-        self.value_id_label_2 = QLabel("Deprecated value Id:")
-        self.value_id_text_field_2 = QLineEdit()
-        self.value_id_label_3 = QLabel("Deprecated value Id:")
-        self.value_id_text_field_3 = QLineEdit()
-        self.value_id_label_4 = QLabel("Deprecated value Id:")
-        self.value_id_text_field_4 = QLineEdit()
-        self.value_id_label_5 = QLabel("Deprecated value Id:")
-        self.value_id_text_field_5 = QLineEdit()
-
-        # Crea el botón "Exportar"
-        self.exportar_button = QPushButton("Exportar")
-        self.exportar_button.clicked.connect(self.exportar_datos)
 
         # Agrega los widgets de entrada de texto y las etiquetas a un layout vertical
         layout = QVBoxLayout()
@@ -36,17 +26,20 @@ class Formulario(QMainWindow):
         layout.addWidget(self.shared_space_text_field)
         layout.addWidget(self.udf_field_label)
         layout.addWidget(self.udf_field_text_field)
-        layout.addWidget(self.value_id_label_1)
-        layout.addWidget(self.value_id_text_field_1)
-        layout.addWidget(self.value_id_label_2)
-        layout.addWidget(self.value_id_text_field_2)
-        layout.addWidget(self.value_id_label_3)
-        layout.addWidget(self.value_id_text_field_3)
-        layout.addWidget(self.value_id_label_4)
-        layout.addWidget(self.value_id_text_field_4)
-        layout.addWidget(self.value_id_label_5)
-        layout.addWidget(self.value_id_text_field_5)
+      
+        # Creamos una lista de QLineEdit
+        #ARREGLAR agregar los labels y los text fields todos en un for.
+        for i in range(1,6):
+            label = QLabel(f"Value {i}:")
+            line_edit = QLineEdit()
+            label.setObjectName(f"value_{i}")
+            line_edit.setObjectName(f"line_edit_{i}")
+            layout.addWidget(label)
+            layout.addWidget(line_edit)
 
+        # Crea el botón "Exportar"
+        self.exportar_button = QPushButton("Exportar")
+        self.exportar_button.clicked.connect(self.exportar_datos)
 
         # Agrega el botón "Exportar" al layout
         layout.addWidget(self.exportar_button)
@@ -60,18 +53,40 @@ class Formulario(QMainWindow):
         self.setCentralWidget(widget)
 
     def mostrarError(self):
-        dlg = QDialog(self)
-        dlg.setWindowTitle("Please type at least a deprecated value!")
-        dlg.exec_()
+        # dlg = QDialog(self)
+        # dlg.setWindowTitle("Please type at least a deprecated value!")
+        # dlg.exec_()
+        # Crear el mensaje de error
+        error_message = "Ocurrió un error inesperado"
+        title = "Error"
+
+        # Crear la ventana de diálogo de error
+        error_dialog = QMessageBox()
+        error_dialog.setIcon(QMessageBox.Critical)
+        error_dialog.setText(error_message)
+        error_dialog.setWindowTitle(title)
+
+        # Mostrar la ventana de diálogo de error
+        error_dialog.exec()
+
+        # Detener la ejecución del programa sin cerrar el formulario. 1 cerrado anormal
+        sys.exit(1)
     
     #itera en todos los QLineEdit y devuelve un array con el texto de estos
     #ERROR HAY TRES TEXTBOXES QUE NO SE TIENEN QUE TOMAR EN CUENTA  
     def get_textFromTextBoxes(self):
         texts = []
         for line_edit in self.findChildren(QLineEdit):
+            
             if line_edit.text():
+                print("Entré: " + line_edit.text())
                 text = line_edit.text()
                 texts.append(text)
+            else:
+                if line_edit.objectName() == "line_edit_1":
+                    print("Entré")
+                    self.mostrarError()
+
         return texts
 
 
@@ -146,4 +161,4 @@ if __name__ == '__main__':
     app = QApplication([])
     ventana = Formulario()
     ventana.show()
-    app.exec_()
+    app.exec()
