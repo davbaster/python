@@ -53,11 +53,8 @@ class Formulario(QMainWindow):
         self.setCentralWidget(widget)
 
     def mostrarError(self):
-        # dlg = QDialog(self)
-        # dlg.setWindowTitle("Please type at least a deprecated value!")
-        # dlg.exec_()
         # Crear el mensaje de error
-        error_message = "Ocurrió un error inesperado"
+        error_message = "Please type a value."
         title = "Error"
 
         # Crear la ventana de diálogo de error
@@ -78,13 +75,13 @@ class Formulario(QMainWindow):
         texts = []
         for line_edit in self.findChildren(QLineEdit):
             
-            if line_edit.text():
-                print("Entré: " + line_edit.text())
+            if line_edit.text():#si tienen texto
+                #print("Entré: " + line_edit.text())#debugging
                 text = line_edit.text()
                 texts.append(text)
             else:
-                if line_edit.objectName() == "line_edit_1":
-                    print("Entré")
+                if line_edit.objectName() == "line_edit_1":#debería verificar si los otros fields tienen texto tambien
+                    #print("Entré")#debugging
                     self.mostrarError()
 
         return texts
@@ -102,10 +99,13 @@ class Formulario(QMainWindow):
         widgets = self.get_textFromTextBoxes()#deprecated values will be saved here
         for text in widgets:
             #si es textbox y no esta vacio
-            if len(deprecated_ids) == 0:
+            print("Index: ", widgets.index(text))
+            if widgets.index(text) == 3:
+                #print("Entré: ", widgets.index(text))
                 deprecated_ids = "'" + text + "'"
             else:
-                deprecated_ids = ",'" + text + "'"
+                if widgets.index(text) > 3:
+                    deprecated_ids = deprecated_ids + ",'" + text + "'"
 
         print(deprecated_ids)
        # if len(deprecated_ids) != 0
@@ -131,7 +131,7 @@ class Formulario(QMainWindow):
                 #status = row[2]
 
                 #concatenated_string = f"{column_a_value} {column_b_value}"
-                APIcall = octane_url + "/api/shared_spaces/" + str(shared_space) + "/workspaces/" + str(wsid) + "/" + entity + "?fields=id,name," + udf_field + "&query=\"" + udf_field + "={id+IN+'" + str(deprecated_ids) + "'}\""
+                APIcall = octane_url + "/api/shared_spaces/" + str(shared_space) + "/workspaces/" + str(wsid) + "/" + entity + "?fields=id,name," + udf_field + "&query=\"" + udf_field + "={id+IN+" + str(deprecated_ids) + "}\""
                 #print(APIcall) #test purposes
                 data.append(APIcall)
             
